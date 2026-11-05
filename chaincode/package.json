@@ -1,0 +1,10 @@
+{
+  "name": "license-registry-chaincode",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Hyperledger Fabric chaincode for the license registry",
+  "main": "lib/license-contract.js",
+  "scripts": {
+    "test": "node --test"
+  }
+}
