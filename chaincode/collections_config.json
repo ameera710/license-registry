@@ -1,0 +1,14 @@
+[
+  {
+    "name": "licensePrivateCollection",
+    "policy": "OR('SCFHSMSP.member', 'HospitalMSP.member')",
+    "requiredPeerCount": 0,
+    "maxPeerCount": 1,
+    "blockToLive": 0,
+    "memberOnlyRead": true,
+    "memberOnlyWrite": true,
+    "endorsementPolicy": {
+      "signaturePolicy": "AND('SCFHSMSP.peer', 'HospitalMSP.peer')"
+    }
+  }
+]

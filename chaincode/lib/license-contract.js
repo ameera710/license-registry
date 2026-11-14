@@ -48,6 +48,7 @@ class LicenseContract extends Contract {
             Buffer.from(JSON.stringify(license))
         );
 
+        ctx.stub.setEvent('LicenseIssued', Buffer.from(JSON.stringify({ licenseId, status: license.status })));
         return JSON.stringify(license);
     }
 
@@ -81,7 +82,34 @@ class LicenseContract extends Contract {
 
         await ctx.stub.putState(key, Buffer.from(JSON.stringify(license)));
 
+        ctx.stub.setEvent('LicenseRenewed', Buffer.from(JSON.stringify({ licenseId, expiryDate: license.expiryDate })));
         return JSON.stringify(license);
+    }
+
+
+    async SavePrivateLicenseData(ctx, licenseId) {
+        this._requireSCFHS(ctx);
+
+        if (!licenseId || !licenseId.trim()) {
+            throw new Error('License ID is required');
+        }
+
+        const transient = ctx.stub.getTransient();
+        const data = transient.get('privateData');
+
+        if (!data || data.length === 0) {
+            throw new Error('Private data must be provided through transient input');
+        }
+
+        const key = ctx.stub.createCompositeKey('licensePrivate', [licenseId]);
+
+        await ctx.stub.putPrivateData(
+            'licensePrivateCollection',
+            key,
+            data
+        );
+
+        return JSON.stringify({ licenseId, saved: true });
     }
 
 }
